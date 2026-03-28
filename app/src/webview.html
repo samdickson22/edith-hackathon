@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Edith</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+
+    :root {
+      --bg: #08080a;
+      --surface: #111114;
+      --surface-raised: #18181c;
+      --border: #1e1e24;
+      --border-hover: #2a2a32;
+      --text: #e4e4e8;
+      --text-dim: #7a7a85;
+      --text-muted: #505058;
+      --accent: #7c6aef;
+      --accent-dim: #5b4cc4;
+      --accent-glow: rgba(124, 106, 239, 0.12);
+      --green: #34d399;
+      --green-bg: rgba(52, 211, 153, 0.08);
+      --green-border: rgba(52, 211, 153, 0.2);
+      --yellow: #fbbf24;
+      --yellow-bg: rgba(251, 191, 36, 0.08);
+      --yellow-border: rgba(251, 191, 36, 0.2);
+      --red: #f87171;
+      --red-bg: rgba(248, 113, 113, 0.08);
+      --mono: 'JetBrains Mono', 'SF Mono', monospace;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius: 14px;
+      --radius-sm: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      padding: 0;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 32px 0 28px;
+      position: relative;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 20%;
+      right: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+    .logo {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -1px;
+      box-shadow: 0 4px 24px rgba(124, 106, 239, 0.25);
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    .header p {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      margin: 20px auto 24px;
+      transition: all 0.3s ease;
+    }
+    .status-badge.connected {
+      background: var(--green-bg);
+      color: var(--green);
+      border: 1px solid var(--green-border);
+    }
+    .status-badge.disconnected {
+      background: var(--red-bg);
+      color: var(--red);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+    }
+    .status-badge.loading {
+      background: var(--yellow-bg);
+      color: var(--yellow);
+      border: 1px solid var(--yellow-border);
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+    .status-badge.loading .status-dot {
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.85); }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: var(--border-hover); }
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    /* Link Code */
+    .link-code-container {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+    .link-code-display {
+      flex: 1;
+      padding: 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: #fff;
+      font-size: 26px;
+      font-weight: 700;
+      font-family: var(--mono);
+      letter-spacing: 4px;
+      text-align: center;
+      user-select: all;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .link-code-display:hover {
+      border-color: var(--accent-dim);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .copy-btn {
+      padding: 16px 18px;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--sans);
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .copy-btn:hover { background: var(--accent-dim); transform: translateY(-1px); }
+    .copy-btn:active { transform: translateY(0); }
+    .copy-btn svg { width: 16px; height: 16px; }
+
+    /* Connection status inline */
+    .ws-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+    .ws-indicator.connected { color: var(--green); }
+    .ws-indicator.waiting { color: var(--yellow); }
+    .ws-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .ws-indicator.waiting .ws-dot {
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    /* Steps */
+    .steps { display: flex; flex-direction: column; gap: 18px; }
+    .step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: 26px;
+      height: 26px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-body { flex: 1; min-width: 0; }
+    .step-text {
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .cmd {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 9px 12px;
+      transition: border-color 0.2s;
+    }
+    .cmd:hover { border-color: var(--border-hover); }
+    .cmd code {
+      flex: 1;
+      font-size: 11.5px;
+      font-family: var(--mono);
+      color: var(--green);
+      word-break: break-all;
+      line-height: 1.4;
+    }
+    .cmd-copy {
+      padding: 4px 10px;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-dim);
+      font-size: 10px;
+      font-weight: 600;
+      font-family: var(--sans);
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.15s;
+    }
+    .cmd-copy:hover { background: var(--border); color: var(--text); }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 8px 0;
+    }
+
+    /* Usage section */
+    .usage {
+      padding: 20px 0 0;
+    }
+    .usage h3 {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .usage-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .usage-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .usage-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .usage-text {
+      flex: 1;
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+    .usage-text strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .usage-text code {
+      background: var(--surface);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      padding: 10px 20px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: var(--sans);
+      opacity: 0;
+      transition: all 0.25s ease;
+      pointer-events: none;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success {
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--green);
+      border: 1px solid var(--green-border);
+    }
+    .toast.error {
+      background: rgba(248, 113, 113, 0.15);
+      color: var(--red);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">E</div>
+      <h1>Edith</h1>
+      <p>AI assistant for your smart glasses</p>
+    </div>
+
+    <div style="text-align:center">
+      <div id="status" class="status-badge loading">
+        <div class="status-dot"></div>
+        <span>Loading...</span>
+      </div>
+    </div>
+
+    <!-- Link Code Card -->
+    <div class="card">
+      <div class="card-label">Your Link Code</div>
+      <div class="link-code-container">
+        <div class="link-code-display" id="link-code-display">--------</div>
+        <button class="copy-btn" id="copy-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy
+        </button>
+      </div>
+      <div id="ws-status" class="ws-indicator waiting">
+        <div class="ws-dot"></div>
+        <span>Waiting for OpenClaw...</span>
+      </div>
+    </div>
+
+    <!-- Setup Card -->
+    <div class="card">
+      <div class="card-label">Setup</div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-text">Install the skill</div>
+            <div class="cmd">
+              <code>npx clawhub install edith</code>
+              <button class="cmd-copy" onclick="copyText('npx clawhub install edith')">Copy</button>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-text">Tell OpenClaw your link code</div>
+            <div class="cmd" id="add-cmd">
+              <code id="add-cmd-text">Set up my Edith glasses with your edith skill. My code is --------</code>
+              <button class="cmd-copy" id="copy-add-cmd">Copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Usage -->
+    <div class="usage">
+      <h3>How to use</h3>
+      <div class="usage-list">
+        <div class="usage-item">
+          <div class="usage-icon">&#127908;</div>
+          <div class="usage-text">Say <code>"Hey Edith"</code> followed by your question</div>
+        </div>
+        <div class="usage-item">
+          <div class="usage-icon">&#128247;</div>
+          <div class="usage-text">Ask <code>"What am I looking at?"</code> to use the camera</div>
+        </div>
+        <div class="usage-item">
+          <div class="usage-icon">&#9995;</div>
+          <div class="usage-text">Say <code>"Stop"</code> or tap your glasses to interrupt</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const statusEl = document.getElementById('status');
+    const toastEl = document.getElementById('toast');
+    const linkCodeDisplay = document.getElementById('link-code-display');
+    const copyBtn = document.getElementById('copy-btn');
+    const wsStatusEl = document.getElementById('ws-status');
+    const addCmdText = document.getElementById('add-cmd-text');
+    const copyAddCmd = document.getElementById('copy-add-cmd');
+
+    let currentLinkCode = '';
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Copied to clipboard', 'success');
+      }).catch(() => {
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        showToast('Copied to clipboard', 'success');
+      });
+    }
+
+    function showToast(msg, type) {
+      toastEl.textContent = msg;
+      toastEl.className = 'toast show ' + type;
+      setTimeout(() => { toastEl.className = 'toast'; }, 2500);
+    }
+
+    function setStatus(state, text) {
+      statusEl.className = 'status-badge ' + state;
+      statusEl.innerHTML = '<div class="status-dot"></div><span>' + text + '</span>';
+    }
+
+    function setWsStatus(connected) {
+      if (connected) {
+        wsStatusEl.className = 'ws-indicator connected';
+        wsStatusEl.innerHTML = '<div class="ws-dot"></div><span>OpenClaw connected</span>';
+      } else {
+        wsStatusEl.className = 'ws-indicator waiting';
+        wsStatusEl.innerHTML = '<div class="ws-dot"></div><span>Waiting for OpenClaw...</span>';
+      }
+    }
+
+    function applyLinkCode(code) {
+      currentLinkCode = code;
+      linkCodeDisplay.textContent = code;
+      addCmdText.textContent = 'Set up my Edith glasses with your edith skill. My code is ' + code;
+    }
+
+    function getAddCmd() {
+      return 'Set up my Edith glasses with your edith skill. My code is ' + currentLinkCode;
+    }
+
+    copyBtn.addEventListener('click', () => copyText(currentLinkCode));
+    copyAddCmd.addEventListener('click', () => copyText(getAddCmd()));
+
+    function startPoll() {
+      setInterval(async () => {
+        try {
+          const res = await fetch('/api/settings');
+          if (res.ok) {
+            const data = await res.json();
+            setWsStatus(data.wsConnected);
+            if (data.wsConnected) {
+              setStatus('connected', 'Connected');
+            } else if (currentLinkCode) {
+              setStatus('loading', 'Waiting for OpenClaw...');
+            }
+          }
+        } catch {}
+      }, 5000);
+    }
+
+    (function init() {
+      const injected = window.__EDITH_CONFIG__;
+      if (injected && injected.linkCode) {
+        applyLinkCode(injected.linkCode);
+        setWsStatus(injected.wsConnected);
+        if (injected.wsConnected) {
+          setStatus('connected', 'Connected');
+        } else {
+          setStatus('loading', 'Waiting for OpenClaw...');
+        }
+        startPoll();
+        return;
+      }
+
+      fetch('/api/settings').then(res => {
+        if (!res.ok) throw new Error('No auth');
+        return res.json();
+      }).then(data => {
+        if (data.linkCode) {
+          applyLinkCode(data.linkCode);
+          setWsStatus(data.wsConnected);
+          if (data.wsConnected) {
+            setStatus('connected', 'Connected');
+          } else {
+            setStatus('loading', 'Waiting for OpenClaw...');
+          }
+        } else {
+          setStatus('disconnected', 'Connect glasses first');
+        }
+        startPoll();
+      }).catch(() => {
+        setStatus('disconnected', 'Connect glasses to start');
+        startPoll();
+      });
+    })();
+  </script>
+</body>
+</html>

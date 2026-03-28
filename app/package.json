@@ -1,0 +1,20 @@
+{
+  "name": "edith",
+  "version": "1.2.1",
+  "description": "Edith — Voice AI assistant for smart glasses, powered by OpenClaw. Say 'Hey Edith' to talk to your AI agent hands-free.",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts"
+  },
+  "dependencies": {
+    "@mentra/sdk": "^2.1.29",
+    "@unkey/api": "^2.3.2",
+    "ws": "^8.20.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/ws": "^8.18.1"
+  }
+}

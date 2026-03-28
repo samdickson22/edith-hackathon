@@ -1,0 +1,6 @@
+{
+  "name": "edith",
+  "version": "1.0.0",
+  "description": "Set up Edith smart glasses as an OpenClaw channel. Installs the plugin, configures the channel, and connects your glasses.",
+  "keywords": ["edith", "smart-glasses", "openclaw", "mentra", "setup"]
+}

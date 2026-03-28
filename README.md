@@ -19,7 +19,7 @@ Edith turns your smart glasses into a hands-free AI assistant powered by OpenCla
 ## Architecture
 
 ```
-Glasses → Edith App (Railway) → WebSocket → OpenClaw Plugin (your machine) → AI Agent → Response → TTS → Glasses
+Glasses → Edith App (DigitalOcean) → WebSocket → OpenClaw Plugin (your machine) → AI Agent → Response → TTS → Glasses
 ```
 
 The OpenClaw plugin connects **outbound** to the hosted Edith app — no port forwarding or tunnels needed. It works like Discord and Telegram channel plugins.
@@ -80,7 +80,7 @@ openclaw plugins install .
 - **AI Backend**: OpenClaw (self-hosted AI gateway)
 - **Knowledge**: Senso.ai REST API
 - **Auth**: Unkey API key management
-- **Hosting**: Railway (app server)
+- **Hosting**: DigitalOcean App Platform
 - **WebSocket**: ws (relay between glasses and OpenClaw)
 
 ## Published Skills (Shipables.dev)

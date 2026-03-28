@@ -72,7 +72,7 @@ with open('$HOME/.openclaw/openclaw.json') as f:
     cfg = json.load(f)
 cfg.setdefault('channels', {})['edith-glasses'] = {
     'enabled': True,
-    'appUrl': 'https://edith-production-a63c.up.railway.app',
+    'appUrl': 'https://edith-app.ondigitalocean.app',
     'linkCode': 'LINK_CODE'
 }
 with open('$HOME/.openclaw/openclaw.json', 'w') as f:

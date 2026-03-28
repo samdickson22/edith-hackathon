@@ -11,7 +11,7 @@ import {
 import { getEdithGlassesRuntime } from "./runtime.js";
 
 const CHANNEL_ID = "edith-glasses";
-const DEFAULT_APP_URL = "https://edith-production-a63c.up.railway.app";
+const DEFAULT_APP_URL = process.env.EDITH_APP_URL || "https://edith-production-a63c.up.railway.app";
 const meta = {
   id: CHANNEL_ID,
   label: "Edith Glasses",

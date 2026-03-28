@@ -1,0 +1,15 @@
+name: edith-glasses
+services:
+  - name: edith-app
+    source_dir: /app
+    dockerfile_path: app/Dockerfile
+    http_port: 3000
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    envs:
+      - key: PACKAGE_NAME
+        value: com.edith.glasses
+      - key: MENTRAOS_API_KEY
+        type: SECRET
+      - key: PORT
+        value: "3000"

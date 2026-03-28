@@ -46,6 +46,11 @@ The WebSocket relay uses Unkey to verify API keys, providing rate limiting and u
 
 - `npx shipables install samdickson22/edith-api-keys`
 
+### Augment Code — AI Coding via Voice
+Wraps Auggie CLI so users can build, debug, and analyze code hands-free through their glasses. "Hey Edith, build me a landing page."
+
+- `npx shipables install samdickson22/edith-augment-code`
+
 ### DigitalOcean
 Deployed infrastructure for the relay server.
 
@@ -89,6 +94,7 @@ openclaw plugins install .
 - [`samdickson22/edith-senso-knowledge`](https://codeables.dev/skills/samdickson22/edith-senso-knowledge) — Senso.ai search
 - [`samdickson22/edith-senso-ingest`](https://codeables.dev/skills/samdickson22/edith-senso-ingest) — Senso.ai ingest
 - [`samdickson22/edith-api-keys`](https://codeables.dev/skills/samdickson22/edith-api-keys) — Unkey key management
+- [`samdickson22/edith-augment-code`](https://codeables.dev/skills/samdickson22/edith-augment-code) — Augment Code via Auggie CLI
 
 ## npm Package
 
